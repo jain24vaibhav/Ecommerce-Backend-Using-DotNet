@@ -38,7 +38,7 @@ namespace Ecommerce.DA
 
         public bool DeleteDepartment(int id)
         {
-            var dep = _db.departments.Where(x => x.departmentId == id);
+            var dep = _db.departments.Where(x => x.departmentId == id).FirstOrDefault();
             _db.Remove(dep);
             try
             {
