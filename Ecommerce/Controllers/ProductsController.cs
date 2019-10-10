@@ -14,6 +14,7 @@ namespace Ecommerce.Controllers
     public class ProductsController : ControllerBase
     {
         ProductDA _pro = new ProductDA();
+        DepartmentDA _dep = new DepartmentDA();
 
         [HttpGet]
         public ICollection<Product> GetProducts()
@@ -78,5 +79,33 @@ namespace Ecommerce.Controllers
             var res = _pro.SearchProducts(query);
             return res;
         }
+
+        [HttpGet("bydepartment/{dep}")]
+        public IActionResult GetProductsByDepartment(string dep)
+        {
+            var depId = _dep.GetDepIdByDepName(dep);
+            if (depId != -1)
+            {
+                var res = _pro.GetProductsByDepartment(depId);
+                   return Ok(res);  
+            }
+            else
+            {
+                return BadRequest(new { message = "Department not found"});
+            }
+            
+        }
+
+        [HttpGet("related/{id}")]
+        public IActionResult GetRelatedProducts(int id)
+        {
+            var depId = _dep.getDepIdByProId(id);
+            
+                var pro = _pro.GetRelatedProducts(depId, id);
+                return Ok(pro);
+            
+           
+        }
+
     }
 }

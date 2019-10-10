@@ -38,5 +38,6 @@ namespace Ecommerce.models
 
         public DbSet<Department> departments { get; set; }
         public DbSet<Product> products { get; set; }
+        public DbSet<User> user { get; set; }
     }
 }

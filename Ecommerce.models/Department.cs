@@ -10,6 +10,6 @@ namespace Ecommerce.models
         [Key]
         public int departmentId { get; set; }
         public string departmentName { get; set; }
-        
+        public string departmentImage { get; set; }
     }
 }

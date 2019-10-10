@@ -12,6 +12,7 @@ namespace Ecommerce.models
         public string productName { get; set; }
         public int productPrice { get; set; }
         public int productMRP { get; set; }
+        public string productImage { get; set; }
         public DateTime creationDate { get; set; }
         public DateTime updationDate { get; set; }
         public string productDescription { get; set; }

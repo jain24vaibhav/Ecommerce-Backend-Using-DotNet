@@ -45,9 +45,10 @@ namespace Ecommerce.DA
         public bool DeleteProduct(int id)
         {
             var pro = _db.products.Where(x => x.productId == id).FirstOrDefault();
-            _db.Remove(pro);
+            
             try
             {
+                _db.Remove(pro);
                 _db.SaveChanges();
                 return true;
             }
@@ -76,6 +77,18 @@ namespace Ecommerce.DA
         public ICollection<Product> SearchProducts(string query)
         {
             var res = _db.products.Where(x => x.productName.Contains(query)).ToArray();
+            return res;
+        }
+
+        public ICollection<Product> GetProductsByDepartment(int depId)
+        {
+            var res = _db.products.Where(x => x.departmentId == depId).ToArray();
+            return res;
+        }
+
+        public ICollection<Product> GetRelatedProducts(int depid, int proId)
+        {
+            var res = _db.products.Where(x => x.departmentId == depid && x.productId != proId).Take(6).ToArray();
             return res;
         }
     }

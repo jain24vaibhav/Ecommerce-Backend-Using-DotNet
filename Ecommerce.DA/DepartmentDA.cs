@@ -39,9 +39,10 @@ namespace Ecommerce.DA
         public bool DeleteDepartment(int id)
         {
             var dep = _db.departments.Where(x => x.departmentId == id).FirstOrDefault();
-            _db.Remove(dep);
+           
             try
             {
+                _db.Remove(dep);
                 _db.SaveChanges();
                 return true;
             }
@@ -63,6 +64,25 @@ namespace Ecommerce.DA
             {
                 return false;
             }
+        }
+
+        public int GetDepIdByDepName (string depName)
+        {
+            try
+            {
+                var res = _db.departments.Where(x => x.departmentName == depName).Select(x => x.departmentId).FirstOrDefault();
+                return res;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int getDepIdByProId (int id)
+        {
+            var depId = _db.products.Where(x => x.productId == id).Select(x => x.departmentId).FirstOrDefault();
+            return depId;
         }
 
     }

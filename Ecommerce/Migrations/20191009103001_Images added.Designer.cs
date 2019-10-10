@@ -4,14 +4,16 @@ using Ecommerce.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20191009103001_Images added")]
+    partial class Imagesadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,29 +67,6 @@ namespace Ecommerce.Migrations
                     b.HasIndex("departmentId");
 
                     b.ToTable("products");
-                });
-
-            modelBuilder.Entity("Ecommerce.models.User", b =>
-                {
-                    b.Property<int>("userId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("userEmail");
-
-                    b.Property<string>("userFirstName");
-
-                    b.Property<string>("userLastName");
-
-                    b.Property<string>("userMobile");
-
-                    b.Property<string>("userPassword");
-
-                    b.Property<string>("userRole");
-
-                    b.HasKey("userId");
-
-                    b.ToTable("user");
                 });
 
             modelBuilder.Entity("Ecommerce.models.Product", b =>
