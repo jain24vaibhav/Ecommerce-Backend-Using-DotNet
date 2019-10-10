@@ -4,51 +4,22 @@ using Ecommerce.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20191010085407_Cart table added")]
+    partial class Carttableadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Ecommerce.models.Address", b =>
-                {
-                    b.Property<int>("addressId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("area");
-
-                    b.Property<string>("city");
-
-                    b.Property<int>("houseno");
-
-                    b.Property<string>("name");
-
-                    b.Property<int>("orderId");
-
-                    b.Property<string>("pincode");
-
-                    b.Property<string>("state");
-
-                    b.Property<int>("userId");
-
-                    b.HasKey("addressId");
-
-                    b.HasIndex("orderId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("addresse");
-                });
 
             modelBuilder.Entity("Ecommerce.models.Cart", b =>
                 {
@@ -76,38 +47,6 @@ namespace Ecommerce.Migrations
                     b.HasKey("departmentId");
 
                     b.ToTable("departments");
-                });
-
-            modelBuilder.Entity("Ecommerce.models.order", b =>
-                {
-                    b.Property<int>("orderId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("orderDate");
-
-                    b.Property<int>("userId");
-
-                    b.HasKey("orderId");
-
-                    b.ToTable("order");
-                });
-
-            modelBuilder.Entity("Ecommerce.models.OrderDetail", b =>
-                {
-                    b.Property<int>("orderIdDetail")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("orderId");
-
-                    b.Property<int>("productId");
-
-                    b.HasKey("orderIdDetail");
-
-                    b.HasIndex("orderId");
-
-                    b.ToTable("orderDetail");
                 });
 
             modelBuilder.Entity("Ecommerce.models.Product", b =>
@@ -166,19 +105,6 @@ namespace Ecommerce.Migrations
                     b.ToTable("user");
                 });
 
-            modelBuilder.Entity("Ecommerce.models.Address", b =>
-                {
-                    b.HasOne("Ecommerce.models.order", "Order")
-                        .WithMany()
-                        .HasForeignKey("orderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ecommerce.models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Ecommerce.models.Cart", b =>
                 {
                     b.HasOne("Ecommerce.models.Product", "Product")
@@ -189,14 +115,6 @@ namespace Ecommerce.Migrations
                     b.HasOne("Ecommerce.models.User", "User")
                         .WithMany()
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ecommerce.models.OrderDetail", b =>
-                {
-                    b.HasOne("Ecommerce.models.order", "Order")
-                        .WithMany()
-                        .HasForeignKey("orderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

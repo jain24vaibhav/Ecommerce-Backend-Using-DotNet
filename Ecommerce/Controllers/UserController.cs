@@ -71,15 +71,157 @@ namespace Ecommerce.Controllers
         [HttpPost("login")]
         public IActionResult UserLogin(LoginModel user)
         {
+            user.userPassword = Hash(user.userPassword);
             var isUser = _user.UserLogin(user);
             if (isUser != null)
             {
                 var tokenstring = GenerateJSONWebToken(isUser);
-                return Ok( new { token = tokenstring, UserEmail = isUser.userEmail});
-            }
-                
+                return Ok( new { token = tokenstring, UserId = isUser.userId});
+            }           
             else
-                return BadRequest(new { message = "User not found." });
+                return BadRequest(new { message = "Invalid Email/Password" });
+        }
+
+        [HttpPost("register")]
+        public IActionResult UserRegister(User user)
+        {
+            if (_user.IsUserByEmail(user.userEmail))
+            {
+                return BadRequest(new { message = "User alreadt exist." });
+            }
+            else
+            {
+                user.userRole = "User";
+                user.userPassword = Hash(user.userPassword);
+                var res = _user.UserRegister(user);
+                if (res)
+                {
+                    var isUser = _user.GetUser(user.userEmail);
+                    var tokenstring = GenerateJSONWebToken(isUser);
+                    return Ok(new { token = tokenstring, UserId = isUser.userId });                 
+                }
+                else
+                {
+                    return BadRequest(new { message = "Error, can't register" });
+                }
+            }
+            
+        }
+
+        [HttpPost("addtocart")]
+        public IActionResult AddToCart(Cart cart)
+        {
+            var res = _user.AddToCart(cart);
+            if (res)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { message = "Can't add to cart" });
+            }
+        }
+
+        [HttpPost("isincart")]
+        public IActionResult IsInCart(Cart cart)
+        {
+            var res = _user.IsInCart(cart);
+            if (res)
+                return Ok(new { status = true });
+            else
+                return Ok(new { status = false });
+        }
+
+        [HttpPost("removefromcart")]
+        public IActionResult RemoveFromCart(Cart cart)
+        {
+            var res = _user.RemoveFromCart(cart);
+            if (res)
+            {
+                return Ok(new { message = "Successfull removed form cart" });
+
+            }
+            else
+            {
+                return BadRequest(new { message = "Can't remove from cart" });
+            }
+        }
+
+        [HttpGet("getcartitemsofuser/{id}")]
+        public IActionResult GetCartItemsOfUser(int id)
+        {
+            var res = _user.GetCartItemsOfUser(id);
+            return Ok(res);
+        }
+
+        [HttpPost("placeorder")]
+        public IActionResult PlaceOrder(Address address)
+        {
+            var itemsInCart = _user.GetCartItemsOfUser(address.userId);
+            if(itemsInCart!=null)
+            {
+                var obj = new order
+                {
+                    userId = address.userId,
+                    orderDate = DateTime.Today.Date
+                };
+                var generateOrderId = _user.GenerateOrderId(obj);
+                if (generateOrderId != -1)
+                {               
+                    foreach(var pro in itemsInCart)
+                    {
+                        var detailObj = new OrderDetail
+                        {
+                            orderId = generateOrderId,
+                            productId = pro.productId
+                        };
+                        var rest = _user.AddToOrderDetail(detailObj);
+                        if (rest)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            BadRequest(new { message = "Error while adding to order detail" });
+                        }
+                    }
+
+                    var res = _user.RemoveAllItemsOfUserFromCart(address.userId);
+                    if(res)
+                    {
+                        address.orderId = generateOrderId;
+                        var addAddress = _user.AddAddress(address);
+                        if (addAddress)
+                        {
+                            return Ok(new { message = "Order placed successfully" });
+                        }
+                        else
+                        {
+                            return BadRequest(new { message = "Error while saving address" });
+                        }
+                        
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "Error while removing items fomr cart" });
+                    }
+                }
+                else
+                {
+                    return BadRequest(new { message = "Not able to generate order id" });
+                }
+            }
+            else
+            {
+                return BadRequest(new { message = "No item in cart" });
+            }
+        }
+
+        [HttpGet("getorderhistory/{id}")]
+        public IActionResult GetOrderHistory(int id)
+        {
+            var res = _user.GetOrderHistory(id);
+            return Ok(res);
         }
 
     }

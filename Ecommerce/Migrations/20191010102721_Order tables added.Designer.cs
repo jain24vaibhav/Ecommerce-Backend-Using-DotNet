@@ -4,14 +4,16 @@ using Ecommerce.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceContext))]
-    partial class EcommerceContextModelSnapshot : ModelSnapshot
+    [Migration("20191010102721_Order tables added")]
+    partial class Ordertablesadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,13 +41,9 @@ namespace Ecommerce.Migrations
 
                     b.Property<string>("state");
 
-                    b.Property<int>("userId");
-
                     b.HasKey("addressId");
 
                     b.HasIndex("orderId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("addresse");
                 });
@@ -171,11 +169,6 @@ namespace Ecommerce.Migrations
                     b.HasOne("Ecommerce.models.order", "Order")
                         .WithMany()
                         .HasForeignKey("orderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ecommerce.models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

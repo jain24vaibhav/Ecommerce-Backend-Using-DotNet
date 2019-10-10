@@ -34,10 +34,18 @@ namespace Ecommerce.models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Cart>()
+                 .HasKey(c => new { c.productId, c.userId });
         }
 
         public DbSet<Department> departments { get; set; }
         public DbSet<Product> products { get; set; }
         public DbSet<User> user { get; set; }
+        public DbSet<Cart> cart { get; set; }
+        public DbSet<Address> addresse { get; set; }
+        public DbSet<order> order { get; set; }
+        public DbSet<OrderDetail> orderDetail { get; set; }
     }
+
 }
